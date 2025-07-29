@@ -9,7 +9,7 @@ const app = express();
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://usermanagementapptest.netlify.app/login',
+  'https://usermanagementapptest.netlify.app',
 ];
 
 app.use(cors({
