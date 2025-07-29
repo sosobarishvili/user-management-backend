@@ -6,14 +6,30 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 
 const app = express();
-app.use(cors());
+
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://usermanagementapptest.netlify.app/login',
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'), false);
+    }
+  },
+  credentials: true,
+}));
+
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Welcome to the API');
+  res.send('Welcome to the User Management API');
 });
 
 const PORT = process.env.PORT || 5000;
