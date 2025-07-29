@@ -24,7 +24,6 @@ exports.register = async (req, res) => {
     });
     res.status(201).json({ ...user, token: generateToken(user.id) });
   } catch (error) {
-    console.error('Register Error:', error); // Add this
     if (error.code === 'P2002')
       return res.status(409).json({ message: 'Email already exists' });
     res.status(500).json({ message: 'Server error' });

@@ -8,20 +8,19 @@ generator client {
 }
 
 model User {
-  id                    String      @id @default(cuid())
-  name                  String
-  email                 String      @unique
-  password              String
-  lastLogin             DateTime?
-  status                UserStatus  @default(ACTIVE) // This is crucial
-  createdAt             DateTime    @default(now())
-  updatedAt             DateTime    @updatedAt
-  passwordResetToken    String?     @unique
-  passwordResetExpires  DateTime?
+  id             Int      @id @default(autoincrement())
+  name           String
+  email          String   @unique
+  password       String
+  lastLogin      DateTime?
+  status         Status   @default(ACTIVE)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  passwordResetToken  String?   @unique
+  passwordResetExpires DateTime?
 }
 
-// This enum definition is what needs to be synced with your DB
-enum UserStatus {
+enum Status {
   ACTIVE
   BLOCKED
 }
