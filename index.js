@@ -49,8 +49,8 @@ app.get('/', (req, res) => {
   res.send('Welcome to the User Management API');
 });
 
-// Define the port the server will listen on
-// Use process.env.PORT for deployment environments (like Render)
-// or fallback to 5000 for local development
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const HOST = '0.0.0.0'; // Render requires binding to 0.0.0.0
+
+app.listen(PORT, HOST, () => console.log(`Server running on http://${HOST}:${PORT}`));

@@ -1,7 +1,5 @@
-// C:\Users\SoSo\Desktop\user-management-app\server\prisma\schema.prisma
-
 datasource db {
-  provider = "postgresql" // Or "mysql", "sqlite", etc. based on your setup
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -10,14 +8,20 @@ generator client {
 }
 
 model User {
-  id                  String    @id @default(cuid())
-  name                String
-  email               String    @unique
-  password            String
-  lastLogin           DateTime?
-  status              String    @default("ACTIVE") // e.g., "ACTIVE", "BLOCKED"
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt // Automatically updates on record change
-  passwordResetToken  String?   @unique // Optional: for password reset functionality
-  passwordResetExpires DateTime? // Optional: for password reset functionality expiration
+  id                    String      @id @default(cuid())
+  name                  String
+  email                 String      @unique
+  password              String
+  lastLogin             DateTime?
+  status                UserStatus  @default(ACTIVE) // This is crucial
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+  passwordResetToken    String?     @unique
+  passwordResetExpires  DateTime?
+}
+
+// This enum definition is what needs to be synced with your DB
+enum UserStatus {
+  ACTIVE
+  BLOCKED
 }
