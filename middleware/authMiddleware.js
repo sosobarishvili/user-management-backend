@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 const protect = async (req, res, next) => {
   let token;
 
-  const isUsersGetRequest = (req.method === 'GET' && req.originalUrl === '/api/');
+  const isUsersGetRequest = (req.method === 'GET' && req.originalUrl === '/api/users');
 
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
