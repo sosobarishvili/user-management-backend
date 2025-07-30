@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
-
 const prisma = new PrismaClient();
-const protect = async (req, res, next) => {
+
+const protect = (checkBlockedStatus = true) => async (req, res, next) => {
   let token;
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
@@ -15,13 +15,11 @@ const protect = async (req, res, next) => {
       if (!user) {
         return res.status(401).json({ message: 'Not authorized, user not found.' });
       }
-      if (user.status === 'BLOCKED') {
+      if (checkBlockedStatus && user.status === 'BLOCKED') {
         return res.status(403).json({ message: 'Your account has been blocked. Please log in again.' });
       }
-
       req.user = user;
       next();
-
     } catch (error) {
       console.error('Authentication error:', error);
       if (error.name === 'TokenExpiredError') {
@@ -33,10 +31,12 @@ const protect = async (req, res, next) => {
       res.status(401).json({ message: 'Not authorized, token failed. Please log in again.' });
     }
   }
-
   if (!token) {
-    res.status(401).json({ message: 'Not authorized, maybe your account is blocked.' });
+    res.status(401).json({ message: 'Not authorized, no token provided.' });
   }
 };
 
 module.exports = { protect };
+
+router.get('/users', protect(false), getUsers);
+router.post('/users/manage', protect(), manageUsers); 
